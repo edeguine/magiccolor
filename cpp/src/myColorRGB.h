@@ -39,7 +39,7 @@ class myColorRGB {
 		int mix_mode = 0; // which mode was used to mix the color in the CIE space
 
 
-	  // For computing the CIELAB coordinates
+	  // For computing the CieLAB coordinates
 		float X0 = 95.047f;
 		float Y0 = 100.0f;
 		float Z0 = 108.883f;
@@ -56,10 +56,10 @@ class myColorRGB {
 	  
         hsv col2hsv();
         static myColorRGB hsv2col(hsv in);
-        static myColorRGB hue_mix(myColorRGB cola, myColorRGB colb, float coeff);
-        static myColorRGB hue_mix(vector<myColorRGB> *col, vector<float> *concentrations);
-        static myColorRGB ciel_mix(myColorRGB cola, myColorRGB colb, float coeff);
-        static myColorRGB ciel_mix(vector<myColorRGB> *colors, vector<float> *concentrations);
+        static myColorRGB hsvMix(myColorRGB cola, myColorRGB colb, float coeff);
+        static myColorRGB hsvMix(vector<myColorRGB> *col, vector<float> *concentrations);
+        static myColorRGB cielMix(myColorRGB cola, myColorRGB colb, float coeff);
+        static myColorRGB cielMix(vector<myColorRGB> *colors, vector<float> *concentrations);
 
         void computeCiel();
         void inverseCiel();

@@ -21,14 +21,13 @@ myColorRGB myColorRGB::hsv2col(hsv in) {
 	return myColorRGB(out.r, out.g, out.b);
 }
 
-myColorRGB myColorRGB::hue_mix(vector<myColorRGB> *col, vector<float> *concentrations) {
+myColorRGB myColorRGB::hsvMix(vector<myColorRGB> *col, vector<float> *concentrations) {
 	hsv in, mix;
 	float concentration = 0;
 	float tot = 0;
 	myColorRGB c;
 
 	for(float concentration: *concentrations) {
-		//cout << "concentration " << concentration << endl;
 		tot += concentration;
 	}
 
@@ -43,7 +42,7 @@ myColorRGB myColorRGB::hue_mix(vector<myColorRGB> *col, vector<float> *concentra
 	return myColorRGB::hsv2col(mix);
 }
 
-myColorRGB myColorRGB::hue_mix(myColorRGB cola, myColorRGB colb, float coeff) {
+myColorRGB myColorRGB::hsvMix(myColorRGB cola, myColorRGB colb, float coeff) {
 	
 	hsv ina, inb, mix;
 	ina = cola.col2hsv();
@@ -56,7 +55,8 @@ myColorRGB myColorRGB::hue_mix(myColorRGB cola, myColorRGB colb, float coeff) {
 	return myColorRGB::hsv2col(mix);
 }
 
-myColorRGB myColorRGB::ciel_mix(vector<myColorRGB> *colors, vector<float> *concentrations) {
+
+myColorRGB myColorRGB::cielMix(vector<myColorRGB> *colors, vector<float> *concentrations) {
 
 	int mode = 0; 
 
@@ -103,7 +103,7 @@ myColorRGB myColorRGB::ciel_mix(vector<myColorRGB> *colors, vector<float> *conce
 	return mix;
 }
 
-myColorRGB myColorRGB::ciel_mix(myColorRGB cola, myColorRGB colb, float coeff) {
+myColorRGB myColorRGB::cielMix(myColorRGB cola, myColorRGB colb, float coeff) {
 	cola.computeCiel();
 	colb.computeCiel();
 
@@ -127,6 +127,35 @@ myColorRGB myColorRGB::ciel_mix(myColorRGB cola, myColorRGB colb, float coeff) {
 	} 
 	colc.inverseCiel();
 	return colc;
+}
+void myColorRGB::inverseCiel() {
+	// Y is already specified;
+	if(mix_mode == 0) {
+		X = Y * x / y;
+		Z = Y * (1 - x - y) / y;
+	}
+
+	X = X / 100.0f;        //X from 0 to  95.047      (Observer = 2°, Illuminant = D65)
+	Y = Y / 100.0f;        //Y from 0 to 100.000
+	Z = Z / 100.0f;        //Z from 0 to 108.883
+
+	float R, G, B;
+
+	R = X *  3.2406f + Y * -1.5372f + Z * -0.4986f;
+	G = X * -0.9689f + Y *  1.8758f + Z *  0.0415f;
+	B = X *  0.0557f + Y * -0.2040f + Z *  1.0570f;
+
+	R = (R > 0.0031308f) ?  1.055f * (pow(R, (1.0f / 2.4f))) - 0.055f: 12.92f * R;
+	G = (G > 0.0031308f) ? 1.055f * (pow(G, (1.0f / 2.4f))) - 0.055f: 12.92f * G;
+  B = (B > 0.0031308f) ? 1.055f * (pow(B, (1.0f / 2.4f))) - 0.055f: 12.92f * B;
+
+	R = R > 1.0f ? 1.0f : R;
+	G = G > 1.0f ? 1.0f : G;
+	B = B > 1.0f ? 1.0f : B;
+
+	r = R * 255;
+	g = G * 255;
+	b = B * 255;
 }
 
 void myColorRGB::computeCiel() {
@@ -158,32 +187,4 @@ void myColorRGB::computeCiel() {
 	z = Z / (X + Y + Z);
 }
 
-void myColorRGB::inverseCiel() {
-	// Y is already specified;
-	if(mix_mode == 0) {
-		X = Y * x / y;
-		Z = Y * (1 - x - y) / y;
-	}
 
-	X = X / 100.0f;        //X from 0 to  95.047      (Observer = 2°, Illuminant = D65)
-	Y = Y / 100.0f;        //Y from 0 to 100.000
-	Z = Z / 100.0f;        //Z from 0 to 108.883
-
-	float R, G, B;
-
-	R = X *  3.2406f + Y * -1.5372f + Z * -0.4986f;
-	G = X * -0.9689f + Y *  1.8758f + Z *  0.0415f;
-	B = X *  0.0557f + Y * -0.2040f + Z *  1.0570f;
-
-	R = (R > 0.0031308f) ?  1.055f * (pow(R, (1.0f / 2.4f))) - 0.055f: 12.92f * R;
-	G = (G > 0.0031308f) ? 1.055f * (pow(G, (1.0f / 2.4f))) - 0.055f: 12.92f * G;
-  B = (B > 0.0031308f) ? 1.055f * (pow(B, (1.0f / 2.4f))) - 0.055f: 12.92f * B;
-
-	R = R > 1.0f ? 1.0f : R;
-	G = G > 1.0f ? 1.0f : G;
-	B = B > 1.0f ? 1.0f : B;
-
-	r = R * 255;
-	g = G * 255;
-	b = B * 255;
-}

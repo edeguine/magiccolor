@@ -2,6 +2,7 @@
 #include "utilcore.h"
 
 float Colorspace::bidirmod(float value, float min, float max) {
+    // Float modulo, brings value between min and max
 
 	float res = value;
 	float vmin = (min < max) ? min : max;
@@ -19,6 +20,8 @@ float Colorspace::bidirmod(float value, float min, float max) {
 }
 
 hsv Colorspace::rgb2hsv(rgb in) {
+    // Converts RGB colors to HSV
+
     hsv         out;
     double      min, max, delta;
 
@@ -27,56 +30,50 @@ hsv Colorspace::rgb2hsv(rgb in) {
     max = in.r > in.g ? in.r : in.g;
     max = max  > in.b ? max  : in.b;
 
-    out.v = max;                                // v
+    out.v = max; // v
     delta = max - min;
-    if (delta < 0.00001)
-    {
+    if (delta < 0.00001) {
         out.s = 0;
         out.h = 0; // undefined, maybe nan?
         return out;
     }
-    if( max > 0.0 ) { // NOTE: if Max is == 0, this divide would cause a crash
-        out.s = (delta / max);                  // s
+
+    if( max > 0.0 ) { // Avoids division by zero
+        out.s = (delta / max); // s
     } else {
         // if max is 0, then r = g = b = 0  
-            // s = 0, v is undefined
         out.s = 0.0;
-        out.h = 0;                            // its now undefined
+        out.h = 0; 
         return out;
     }
-    if( in.r >= max )                           // > is bogus, just keeps compilor happy
+    if(in.r >= max)
         out.h = (in.g - in.b) / delta;        // between yellow & magenta
     else
-    if( in.g >= max )
+    if(in.g >= max)
         out.h = 2.0 + (in.b - in.r) / delta;  // between cyan & yellow
     else
         out.h = 4.0 + (in.r - in.g) / delta;  // between magenta & cyan
 
-    out.h *= 60.0;                              // degrees
+    out.h *= 60.0; // degrees
 
     while(out.h < 0.0 ) {
         out.h += 360.0;
-		}
+	}
 
     return out;
 }
 
 rgb Colorspace::hsv2rgb(hsv in) {
-    double      hh, p, q, t, ff;
-    long        i;
-    rgb         out;
+    // HSV to RGB conversion
+
+    double hh, p, q, t, ff;
+    long i;
+    rgb out;
    
     in.h = Colorspace::bidirmod(in.h, 0.0f, 360.0f);
     in.s = Colorspace::bidirmod(in.s, 0.0f, 1.0f);
     in.v = Colorspace::bidirmod(in.v, 0.0f, 255.0f);
     
-    if(in.s < 0.0) {       // < is bogus, just shuts up warnings
-				cout << "colorspace bug " << endl;
-        out.r = in.v;
-        out.g = in.v;
-        out.b = in.v;
-        return out;
-    }
     hh = in.h;
     
     if(hh >= 360.0) hh = 0.0;

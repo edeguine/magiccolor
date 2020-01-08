@@ -36,6 +36,8 @@ void Kandinsky::distributePoints(myImage *mim, int n, myPoint start, myPoint end
 }
 
 void Kandinsky::extractGradientDirection(string jparam, myPoint *gradStart, myPoint *gradEnd) {
+    // Helper function to get the anchor points from the JSON params
+
 	json j = json::parse(jparam);
 	gradStart->x = j["gradientDirection"]["start"]["x"];
 	gradStart->y = j["gradientDirection"]["start"]["y"];
@@ -45,16 +47,20 @@ void Kandinsky::extractGradientDirection(string jparam, myPoint *gradStart, myPo
 }
 
 void Kandinsky::androidPalette(int *pixels, int w, int h, string jpalette) {
+    // Creates a linear gradient rendering from a color palette to display in the UI
+
     myImage *mim;
     mim = (myImage *) new myCImage(w, h);
-		utilcore::importARGB8888(pixels, w, h, mim);
-		vector<myColorRGB> palette;
-		utilcore::importPalette(jpalette, &palette);
-		Gradient::sampleGradient(mim, &palette);
-		utilcore::exportARGB8888(mim, pixels, w, h);
+    utilcore::importARGB8888(pixels, w, h, mim);
+    vector<myColorRGB> palette;
+    utilcore::importPalette(jpalette, &palette);
+    Gradient::sampleGradient(mim, &palette);
+    utilcore::exportARGB8888(mim, pixels, w, h);
 }
 
 void Kandinsky::androidSeparateBW(int *pixels, int w, int h, float threshold, string jparam) {
+    // Main function called by the Android app to read JSON parameters and perform the coloring
+
     myImage *mim;
     mim = (myImage *) new myCImage(w, h);
     utilcore::importARGB8888(pixels, w, h, mim);
@@ -77,9 +83,17 @@ void Kandinsky::androidSeparateBW(int *pixels, int w, int h, float threshold, st
 
 
 void Kandinsky::pipeline(myImage *mim, float threshold, vector<myColorRGB> *palette, myPoint gradStart, myPoint gradEnd) {
+    
+    /* In this function we:
+     - extract points above and points below the threshold
+     - add anchor points to cover the full picture
+     - color the black points with a gradient using gradStart and gradEnd as anchor points
+    */
 
 	vector<myPoint> black;
 	vector<myPoint> white;
+
+    // Separate Black and White
 	Selecter::separateBW(mim, threshold, &black, &white);
 
 	myImage *gradient;
@@ -88,14 +102,13 @@ void Kandinsky::pipeline(myImage *mim, float threshold, vector<myColorRGB> *pale
 
 	vector<myPoint> colorCenters;
 
+    // Add anchor points
     if(!isRainbow) {
         Kandinsky::distributePoints(mim, palette->size(), gradStart, gradEnd, &colorCenters); 
-        for(auto p: colorCenters) {
-            cout << p << " ";
-        }
-        cout << endl;
-     }
+    }
 
+
+    // Color with the gradient
     if(isRainbow) {
         myPoint direction;
         direction = gradEnd - gradStart;
@@ -111,7 +124,4 @@ void Kandinsky::pipeline(myImage *mim, float threshold, vector<myColorRGB> *pale
 	for(auto p: white) {
 		mim->setCol(p, myblack);
 	}
-}
-
-void Kandinsky::test() {
 }

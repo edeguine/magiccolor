@@ -12,7 +12,6 @@
 class Kandinsky {
 
 	public:
-		static void test();
 		static void pipeline(myImage *mim, float threshold = 0.5, vector<myColorRGB> *palette = nullptr, myPoint gradStart= myPoint(100, 0), myPoint gradEnd = myPoint(400, 400));
 		static void androidSeparateBW(int *pixels, int w, int h, float threshold, string jparam);
 		static void androidPalette(int *pixels, int w, int h, string jpalette);

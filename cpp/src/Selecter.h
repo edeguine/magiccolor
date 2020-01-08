@@ -18,7 +18,7 @@
 class Selecter {
     
 public:
-		static void separateBW(myImage *mim, float threshold, vector<myPoint> *black, vector<myPoint> *white);
+    static void separateBW(myImage *mim, float threshold, vector<myPoint> *black, vector<myPoint> *white);
 };
 
 
