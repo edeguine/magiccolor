@@ -1,58 +1,66 @@
 #include "utilcore.h"
 
 void utilcore::importPalette(string jpalette, vector<myColorRGB> *colpalette) {
-	auto palette = json::parse(jpalette);
-	auto jcols = palette["palette"];
-	for(auto jcol: jcols) {
-		colpalette->push_back(myColorRGB(jcol[1], jcol[2], jcol[3], jcol[0]));
-	}
+    // Extact color palette from JSON parameters
+    // {"palette": [[A0, R0, G0, B0], [A1, R1, G1, B1]]}
+
+    auto palette = json::parse(jpalette);
+    auto jcols = palette["palette"];
+    for(auto jcol: jcols) {
+        colpalette->push_back(myColorRGB(jcol[1], jcol[2], jcol[3], jcol[0]));
+    }
 }
 
 string utilcore::exportPalette(vector<myColorRGB> *palette) {
-	json jpalette;
-	json jcolors;
-	for(auto c: *palette) {
-		json jcol;
-		jcol.push_back(c.alpha());
-		jcol.push_back(c.red());
-		jcol.push_back(c.green());
-		jcol.push_back(c.blue());
+    // Create JSON from palette
+    // {"palette": [[A0, R0, G0, B0], [A1, R1, G1, B1]]}
+    json jpalette;
+    json jcolors;
+    for(auto c: *palette) {
+        json jcol;
+        jcol.push_back(c.alpha());
+        jcol.push_back(c.red());
+        jcol.push_back(c.green());
+        jcol.push_back(c.blue());
 
-		jcolors.push_back(jcol);
-	}
-	jpalette["palette"] = jcolors;
-	return jpalette.dump();
+        jcolors.push_back(jcol);
+    }
+    jpalette["palette"] = jcolors;
+    return jpalette.dump();
 }
 
 void utilcore::importARGB8888(int *pixels, int w, int h, myImage *mim) {
+    // Import a bitmap image in ARGB8888 format
 
-	int a, r, g, b;
-	myPoint p;
-	myColorRGB col;
-	int channels = 4;
+    int a, r, g, b;
+    myPoint p;
+    myColorRGB col;
+    int channels = 4;
 
-	for(int i = 0; i < w; i++) {
-		for(int j = 0; j < h; j++) {
+    for(int i = 0; i < w; i++) {
+        for(int j = 0; j < h; j++) {
             a = pixels[j * w * channels + i * channels];
             r = pixels[j * w * channels + i * channels + 1];
             g = pixels[j * w * channels + i * channels + 2];
             b = pixels[j * w * channels + i * channels + 3];
-						col = myColorRGB(r, g, b, a);
-						p.x = i;
-						p.y = j;
-						mim->setCol(p, col);
-		}
-	}
+            col = myColorRGB(r, g, b, a);
+            p.x = i;
+            p.y = j;
+            mim->setCol(p, col);
+        }
+    }
 }
 
 void utilcore::exportARGB8888(myImage *mim, int *pixels, int w, int h) {
+    // Export an image to an ARGB8888 bitmap
+
     myColorRGB col;
-		myPoint p;
-		int channels = 4;
+        myPoint p;
+        int channels = 4;
     for(int i = 0; i < w; i++) {
         for(int j = 0; j < h; j++) {
-					p.x = i;
-					p.y = j;
+          p.x = i;
+          p.y = j;
           col = mim->getCol(p);
           pixels[j * w * channels + i * channels] = (int) col.alpha();
           pixels[j * w * channels + i * channels + 1] = (int) col.red();
@@ -63,22 +71,24 @@ void utilcore::exportARGB8888(myImage *mim, int *pixels, int w, int h) {
 }
 
 mt19937 utilcore::getMTgenerator(int seed) {
-	srand(seed);
-	random_device rd;
-	mt19937 gen(rd());
+    // Helper function to get a Mersene-Twister random generator
 
-	return gen;
+    srand(seed);
+    random_device rd;
+    mt19937 gen(rd());
+
+    return gen;
 }
 
 
 int utilcore::randomInt(int min, int max) {
-	srand(clock());
-	random_device rd;
-	mt19937 gen(rd());
+    srand(clock());
+    random_device rd;
+    mt19937 gen(rd());
     
-	uniform_real_distribution<> dis(0, 1);
+    uniform_real_distribution<> dis(0, 1);
 
-	return (int) (min + dis(gen) * (max - min));
+    return (int) (min + dis(gen) * (max - min));
 }
 
 int utilcore::randomInt(int min, int max, mt19937 gen) {
@@ -93,47 +103,45 @@ int utilcore::randomInt(int min, int max, int seed) {
 }
 
 double utilcore::randomDouble(double seed, double min, double max) {
-	srand(seed);
-	random_device rd;
-	mt19937 gen(rd());
-	uniform_real_distribution<> dis(0, 1);
+    srand(seed);
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_real_distribution<> dis(0, 1);
 
-	return (min + dis(gen) * (max - min));
+    return (min + dis(gen) * (max - min));
 }
 
 float utilcore::randomFloat(float min, float max) {
-	srand(clock());
-	random_device rd;
-	mt19937 gen(rd());
-	uniform_real_distribution<> dis(0, 1);
+    srand(clock());
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_real_distribution<> dis(0, 1);
 
-	return (min + dis(gen) * (max - min));
+    return (min + dis(gen) * (max - min));
 }
 
 float utilcore::randomFloat(float min, float max, mt19937 generator) {
-        uniform_real_distribution<> dis(0, 1);
+    uniform_real_distribution<> dis(0, 1);
         
-        return (min + dis(generator) * (max - min));
+    return (min + dis(generator) * (max - min));
 }
 
 float utilcore::randomFloat(float min, float max, int seed) {
-        srand(seed);
-        //random_device rd;
-       // mt19937 gen(rd());
-        mt19937 gen(seed);
-        uniform_real_distribution<> dis(0, 1);
-        
-        return (min + dis(gen) * (max - min));
+    srand(seed);
+    mt19937 gen(seed);
+    uniform_real_distribution<> dis(0, 1);
+
+    return (min + dis(gen) * (max - min));
 }
 
 myPoint utilcore::randomVec(myPoint topleft, myPoint bottomright) {
- 	// Returns a vector between topleft and bottomright
-	srand(clock());
-	random_device rd;
-	mt19937 gen(rd());
-	uniform_real_distribution<> dis(0, 1);
+    // Returns a random vector between topleft and bottomright
+    srand(clock());
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_real_distribution<> dis(0, 1);
   
-	myPoint res = topleft + myPoint((int) (dis(gen)*(bottomright - topleft).x), 
-		(int) (dis(gen)*(bottomright - topleft).y));
-	return res;
+    myPoint res = topleft + myPoint((int) (dis(gen)*(bottomright - topleft).x), 
+        (int) (dis(gen)*(bottomright - topleft).y));
+    return res;
 }
