@@ -55,14 +55,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {pickPicture();
             }
         });
-
-        final Activity a = this;
-        findViewById(R.id.btn_test).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FilterBWActivity.test(a);
-            }
-        });
     }
 
     void initToolbar() {
@@ -72,13 +64,10 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setNavigationIcon(R.drawable.ic_home_24px);
     }
 
-    /**
-     * A native method that is implemented by the 'native-lib' native library,
-     * which is packaged with this application.
-     */
-    public native String stringFromJNI();
 
     public void pickPicture() {
+        // Shows an image picker
+
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_PICK);
@@ -86,8 +75,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Triggers an image picker and calls the coloring activity
+
         if (requestCode == PICK_IMAGE) {
             Log.v(TAG, data.getData().toString());
             Intent intent = new Intent(this, FilterBWActivity.class);

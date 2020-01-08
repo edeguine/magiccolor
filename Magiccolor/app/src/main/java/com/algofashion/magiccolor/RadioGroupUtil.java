@@ -28,6 +28,9 @@ public class RadioGroupUtil {
     }
 
     public void check(View view) {
+
+        // Check one of the radio
+
         uncheckAll();
         ((RadioButton) view).setChecked(true);
     }

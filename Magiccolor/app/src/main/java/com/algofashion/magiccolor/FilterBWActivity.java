@@ -65,7 +65,6 @@ public class FilterBWActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         initUI();
         initTouchHandler();
-
     }
 
     // UI code
@@ -75,6 +74,7 @@ public class FilterBWActivity extends AppCompatActivity {
 
         initToolbar();
 
+        // Load the image passed on from the picker
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             String value = extras.getString("Image");
@@ -102,12 +102,11 @@ public class FilterBWActivity extends AppCompatActivity {
         paletteControls = new PaletteControls(this);
         paletteControls.initUI();
 
+        // Scroll the view a little to show the palettes
         scrollView(27);
-
     }
 
     void initToolbar() {
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Magic color");
         toolbar.setNavigationIcon(R.drawable.ic_home_24px);
@@ -122,6 +121,7 @@ public class FilterBWActivity extends AppCompatActivity {
 
     public void initTouchHandler() {
 
+        // The touch handler is used to define gradient directions
         touchHandler = new TouchHandler(this);
         View iv = findViewById(R.id.iv_picture);
         iv.setOnTouchListener(new View.OnTouchListener() {
@@ -132,6 +132,17 @@ public class FilterBWActivity extends AppCompatActivity {
                     touchHandler.dispTouch();
                 }
                 return true;
+            }
+        });
+    }
+
+    public final void scrollViewPx(int px){
+        final ScrollView sview = findViewById(R.id.sv_main);
+        final int fpx = px;
+        sview.post(new Runnable() {
+            @Override
+            public void run() {
+                sview.scrollTo(0, fpx);
             }
         });
     }
@@ -147,38 +158,18 @@ public class FilterBWActivity extends AppCompatActivity {
         });
     }
 
-    public final void scrollViewPx(int px){
-        final ScrollView sview = findViewById(R.id.sv_main);
-        final int pxarg = px;
-        sview.post(new Runnable() {
-            @Override
-            public void run() {
-                sview.scrollTo(0, pxarg);
-            }
-        });
-    }
-
-    /**
-     * A native method that is implemented by the 'native-lib' native library,
-     * which is packaged with this application.
-     */
-    public native String stringFromJNI();
-
-    public static void test(Activity a) {
-        String path = "@drawable-nodpi/sunset.png";
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-        Bitmap bitmap = BitmapFactory.decodeResource(a.getResources(), R.drawable.sunset, options);
-        for(int i = 0; i < bitmap.getWidth(); i++) {
-            Log.v(TAG, String.valueOf(bitmap.getPixel(i, 0)));
-            Color c = Color.valueOf(bitmap.getPixel(i, 0));
-            Log.v(TAG, c.toString());
-        }
-    }
-
     // Drawing code
 
     public void separateBW() {
+
+        /* This function:
+         - loads the bitmap
+         - gathers parameters from the UI (gradient palette, black threshold)
+         - calls CPP to do the processing
+         - displays the result
+         */
+
+
         Bitmap bitmap = Bitmap.createBitmap(800, 800, Bitmap.Config.ARGB_8888);
         Bitmap bcopy = null;
         try {
@@ -200,17 +191,18 @@ public class FilterBWActivity extends AppCompatActivity {
         String jpalette = paletteControls.getColorPalette();
         Log.v(TAG, "jpalette: " + jpalette);
 
-        String jparam = jpalette;
-        jparam = JSONUtils.addGradientDirection(jpalette, touchHandler.getStart(), touchHandler.getEnd());
-
-        String gradientType = paletteControls.getGradientType();
-        jparam = JSONUtils.addGradientType(jparam, gradientType);
-
-        Log.v(TAG, "jparam: " + jparam);
-
 
         if(paletteControls.paletteMode() == "custom") {
             if (jpalette != null) {
+
+                String jparam;
+                jparam = JSONUtils.addGradientDirection(jpalette, touchHandler.getStart(), touchHandler.getEnd());
+
+                String gradientType = paletteControls.getGradientType();
+                jparam = JSONUtils.addGradientType(jparam, gradientType);
+
+                Log.v(TAG, "jparam: " + jparam);
+
                 separateBW(pixels, w, h, threshold, jparam);
                 bcopy.setPixels(pixels, 0, w, 0, 0, w, h);
                 ImageView iv = findViewById(R.id.iv_picture);
@@ -225,6 +217,14 @@ public class FilterBWActivity extends AppCompatActivity {
         }
 
         if(paletteControls.paletteMode() == "standard") {
+
+            String jparam;
+            jparam = JSONUtils.addGradientDirection(jpalette, touchHandler.getStart(), touchHandler.getEnd());
+
+            String gradientType = paletteControls.getGradientType();
+            jparam = JSONUtils.addGradientType(jparam, gradientType);
+
+            Log.v(TAG, "jparam: " + jparam);
 
             separateBW(pixels, w, h, threshold, jparam);
             bcopy.setPixels(pixels, 0, w, 0, 0, w, h);
@@ -247,6 +247,10 @@ public class FilterBWActivity extends AppCompatActivity {
     }
 
     public void checkMediaPermissionsForSaveImage() {
+
+        // The logic uses the saveImageHelperPermissionCheck flag
+        // to make sure we write the image after granting the permission
+
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PERMISSION_GRANTED) {
@@ -276,18 +280,13 @@ public class FilterBWActivity extends AppCompatActivity {
     }
 
     public void saveImage() {
-        /*
-        ImageView iv = findViewById(R.id.iv_picture);
-        Bitmap bitmap = ((BitmapDrawable)iv.getDrawable()).getBitmap();
-        MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "colored" , "Gradient colored image");
-
-        */
-
         saveImagePNG();
         Toast.makeText(getApplicationContext(), "Saved image", 5).show();
     }
 
     public void saveImagePNG() {
+
+        // Saves the image to the MediaStore to make it accessible outside of the app
 
             ImageView iv = findViewById(R.id.iv_picture);
             Bitmap bitmap = ((BitmapDrawable)iv.getDrawable()).getBitmap();

@@ -20,6 +20,9 @@ public class PaletteLibrary {
     public native void separateBW(int[] pixels, int w, int h, float threshold, String jpalette);
 
     public PaletteLibrary(Activity a) {
+
+        // The names of the palettes correspond to small PNG files in res/drawable-nodpi
+
         activity = a;
 
         library = new ArrayMap();
@@ -42,6 +45,9 @@ public class PaletteLibrary {
     }
 
     public Bitmap createRendering(int w, int h, String name) {
+
+        // Creates a bitmap showing the palette
+
         Collection<Integer> pal = getPalette(name);
         String jpalette = PaletteUtils.makeJSONPalette(pal);
         Bitmap b = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
@@ -53,6 +59,8 @@ public class PaletteLibrary {
     }
 
     public Bitmap createRainbowRendering(int w, int h) {
+
+        // Special case rendering for the rainbow mode
 
         String jparam = "{}";
         jparam = JSONUtils.addGradientType(jparam, "rainbow");
@@ -76,6 +84,8 @@ public class PaletteLibrary {
     }
 
     public Collection<Integer> createPaletteFromPNG(String filename) {
+
+        // Generate a palette from a PNG file (one pixel per color)
 
         String path = "@drawable/" + filename;
         int id = activity.getResources().getIdentifier(path, null, activity.getPackageName());

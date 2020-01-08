@@ -18,8 +18,9 @@ void Gradient::linearGradient(myImage *mim, vector<myPoint> centers, vector<myCo
 	myPoint p;
 	myColorRGB col;
 	float concentration;
-	int nc = palette.size();
-	int np = centers.size();
+	int np = palette.size();
+	int nc = centers.size();
+
 	int first, second;
 	float t = 0;
 	myPoint start, end;
@@ -34,9 +35,9 @@ void Gradient::linearGradient(myImage *mim, vector<myPoint> centers, vector<myCo
 
 			t = (p - start).dot(end - start) / (d * d); // Scalar product to get the projection on the linear axis (start, end)
 
-			first = ((int) (t * np)) % nc; // Concentration between evenly spaced anchor points
-			second = (first + 1) % nc;
-			concentration =	1.0f - (t * np - ((int) (t * np)));
+			first = ((int) (t * nc)) % np; // Concentration between evenly spaced anchor points
+			second = (first + 1) % np;
+			concentration =	1.0f - fabs(t * nc - ((int) (t * nc)));
 
 			col = myColorRGB::cielMix(palette.at(first), palette.at(second), concentration);
 			mim->setCol(p, col);

@@ -6,6 +6,8 @@ import org.json.JSONObject;
 
 public class JSONUtils {
 
+    // This class helps with constructing the JSON passed to CPP
+
     public static String addGradientDirection(String jparams, myPoint start, myPoint end) {
 
         try {

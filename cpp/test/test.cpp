@@ -8,10 +8,11 @@
 using namespace std;
 
 void testKandinsky(myImage *mim) {
-	string jpalette = "{\"palette\":[[255,0,0,255],[255,255,0,0], [255, 247, 297, 22]]}";
+	//string jpalette = "{\"palette\":[[255,0,0,255],[255,255,0,0], [255, 247, 297, 22]]}";
+	string jpalette = "{\"palette\":[[255,0,0,255]]}";
 	vector<myColorRGB> palette;
-	myPoint start(0, 0);
-	myPoint end(800, 800);
+	myPoint start(200, 200);
+	myPoint end(400, 400);
 	utilcore::importPalette(jpalette, &palette);
 
 	Kandinsky::pipeline(mim, 0.5, &palette, start, end);

@@ -12,6 +12,8 @@ import java.util.Collection;
 public class PaletteUtils {
 
     public static void fillColorBitmap(Bitmap b, int color) {
+        // Creates a bitmap of a single color
+
         for(int i = 0; i < b.getWidth(); i++) {
             for(int j = 0; j < b.getHeight(); j++) {
                 b.setPixel(i, j, color);
@@ -20,6 +22,10 @@ public class PaletteUtils {
     }
 
     public static String makeJSONPalette(Collection<Integer> colors) {
+
+        // Creates a valid JSON palette from the colors
+        // {"palette"; [[A0, R0, G0, B0] , [A1, R1, G1, B1]]
+
         JSONObject json = new JSONObject();
         JSONArray jcolors = new JSONArray();
 
@@ -42,11 +48,7 @@ public class PaletteUtils {
     }
 
     public static String makeJSONAlgo(String mode) {
-        // Mode is an algo name
-        /*
-            rainbow
-            ...
-         */
+        // Make a JSON when the color palette is an algo, like rainbow
 
         JSONObject json = new JSONObject();
         try {

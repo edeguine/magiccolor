@@ -32,7 +32,6 @@ void Kandinsky::distributePoints(myImage *mim, int n, myPoint start, myPoint end
 		p = p + (end - start).scale(dist / (start.dist(end)));
 		res->push_back(p);
 	}
-
 }
 
 void Kandinsky::extractGradientDirection(string jparam, myPoint *gradStart, myPoint *gradEnd) {
@@ -104,7 +103,7 @@ void Kandinsky::pipeline(myImage *mim, float threshold, vector<myColorRGB> *pale
 
     // Add anchor points
     if(!isRainbow) {
-        Kandinsky::distributePoints(mim, palette->size(), gradStart, gradEnd, &colorCenters); 
+        Kandinsky::distributePoints(mim, palette->size() > 1? palette->size(): 2, gradStart, gradEnd, &colorCenters); 
     }
 
 

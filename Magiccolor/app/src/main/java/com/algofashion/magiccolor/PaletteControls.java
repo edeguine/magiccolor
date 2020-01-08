@@ -35,6 +35,8 @@ public class PaletteControls {
 
     public void registerListeners() {
 
+        // Creates the UX for adding and editing colors in custom mode
+
         RadioGroup paletteType = activity.findViewById(R.id.rd_group_palette_type);
 
         paletteType.setOnCheckedChangeListener(
@@ -83,6 +85,9 @@ public class PaletteControls {
     }
 
     public void initRadioGroupsPalette() {
+
+        // Creates the radio group with all the palettes
+
         Vector<Integer> buttons = new Vector<Integer>();
         buttons.add(R.id.rd_rainbow);
         buttons.add(R.id.rd_carmin);
@@ -111,10 +116,14 @@ public class PaletteControls {
 
     public void pickDefaultPalette() {
 
+        // Picks a palette by default
+
         rd_group_standard_palette.check(activity.findViewById(R.id.rd_rainbow));
     }
 
     public void loadPaletteRenderings() {
+
+        // Add the gradients showing the palette in the UI
 
         Vector<Pair<Integer, String>> iv = new Vector<Pair<Integer, String>>();
         iv.add(new Pair(R.id.iv_carmin, "carmin"));
@@ -142,6 +151,8 @@ public class PaletteControls {
     }
 
     public void addColor(int color) {
+        // Just adds the view, which calls edit color to create the bitmap and add to the palette
+
         LinearLayout paletteLayout = activity.findViewById(R.id.layout_palette_picker);
         LinearLayout layout = createColorView(color);
         paletteLayout.addView(layout);
@@ -150,6 +161,8 @@ public class PaletteControls {
     }
 
     public void editColor(TextView tv, int color) {
+        // Changes the color for that line
+
         Bitmap b = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
         PaletteUtils.fillColorBitmap(b, color);
         ((ImageView) colorViews.get(tv)).setImageBitmap(b);
@@ -157,13 +170,19 @@ public class PaletteControls {
     }
 
     public void removeColor(TextView tv) {
+        // Remove the color from the palette
+
         View topLayout = (View) ((View) tv.getParent()).getParent();
         ((ViewManager) topLayout).removeView((View) tv.getParent());
-        colorViews.remove(tv);
-        colorPalette.remove(tv);
+
+        LinearLayout layout = (LinearLayout) tv.getParent();
+        TextView tv_edit = (TextView) layout.getChildAt(1);
+        colorViews.remove(tv_edit);
+        colorPalette.remove(tv_edit);
     }
 
     public void showPaletteControls(int radioId) {
+        // Switches between predefined color palettes and custom color palette
 
         switch (radioId) {
             case R.id.rd_palette_standard:
@@ -178,10 +197,14 @@ public class PaletteControls {
     }
 
     public void showPaletteLibrary() {
+        // Shows the predefined palettes
+
         activity.findViewById(R.id.layout_palette_library).setVisibility(View.VISIBLE);
     }
 
     public void showPaletteCustom() {
+        // Shows the UI to build a custom color palette
+
         activity.findViewById(R.id.layout_palette_picker).setVisibility(View.VISIBLE);
     }
 
@@ -195,14 +218,25 @@ public class PaletteControls {
     }
 
 
-
     public int dpToPx(int dp) {
+        // Convenience function
+
         final float scale = activity.getResources().getDisplayMetrics().density;
         int padding_in_px = (int) (dp * scale + 0.5f);
         return padding_in_px;
     }
 
     public LinearLayout createColorView(int color) {
+
+        /*
+        Creating a color view for the custom palettes involved creating:
+         - the small bitmap with the color
+         - An edit button
+         - A remove button
+
+         The quirk is that we call edit on all views to register the color into the palette, because the Map is keyed by the edit view
+
+         */
 
         LinearLayout layout = new LinearLayout(activity);
         layout.setLayoutDirection(LinearLayout.HORIZONTAL);
@@ -303,6 +337,8 @@ public class PaletteControls {
 
     public String getColorPalette() {
 
+        // Returns a JSON of the color palette
+
         String mode = paletteMode();
 
         if(mode == "custom") {
@@ -328,6 +364,9 @@ public class PaletteControls {
     }
 
     public String paletteMode() {
+
+        // Returns which palette mode is selected
+
         RadioGroup rg = activity.findViewById(R.id.rd_group_palette_type);
         int radioId = rg.getCheckedRadioButtonId();
 
@@ -341,6 +380,9 @@ public class PaletteControls {
     }
 
     public void setPaletteRenderingIV(ImageView view, String name) {
+
+        // Generates a small bitmap showing the color palette
+
         view.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         if(name == "rainbow") {

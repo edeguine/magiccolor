@@ -7,6 +7,9 @@ import android.view.View;
 
 public class TouchHandler {
 
+    // This class is used to draw the gradient direction by touching the screen twice
+    // once a the start once at the end
+
     public float ax, ay;
     public float bx, by;
     String status;
@@ -28,7 +31,7 @@ public class TouchHandler {
             newStatus = "end";
         }
 
-        if(status == "end") {
+        if(status == "end") { // Accepting the second event
             bx = ev.getX();
             by = ev.getY();
             newStatus = "start";
