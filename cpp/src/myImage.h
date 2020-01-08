@@ -1,7 +1,6 @@
 #ifndef MYIMAGE_H
 #define MYIMAGE_H
 
-//#include <png++/png.hpp>
 #include <vector>
 
 #include "myColorRGB.h"

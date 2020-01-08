@@ -12,7 +12,6 @@ myPoint myImage::randomPoint() {
 
 
 void myImage::clear() {
-
 	myPoint point(0, 0);
 	for(int i = 0; i < w; i++) {
 		for(int j = 0; j < h; j++) {
@@ -24,7 +23,6 @@ void myImage::clear() {
 }
 
 void myImage::clearBlack() {
-    
     myPoint point(0, 0);
     for(int i = 0; i < w; i++) {
         for(int j = 0; j < h; j++) {
@@ -36,7 +34,6 @@ void myImage::clearBlack() {
 }
 
 void myImage::copy(myImage *ref) {
-
 	myPoint current;
 
 	for(int i = 0; i < w; i++) {
