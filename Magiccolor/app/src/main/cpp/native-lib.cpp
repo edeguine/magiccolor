@@ -9,10 +9,7 @@ Java_com_algofashion_magiccolor_MainActivity_stringFromJNI(
     return env->NewStringUTF(hello.c_str());
 }
 
-
-#include "../../../../../../../external_folder/RedPaint.h"
-#include "../../../../../../../external_folder/ptTest.h"
-#include "../../../../../../../external_folder/psychetouch/psychetouch/src/libcoloring/Kandinsky.h"
+#include "../../../../../cpp/src/Kandinsky.h"
 
 extern "C"
 int Color(int a, int r, int g, int b) {
@@ -149,45 +146,4 @@ Java_com_algofashion_magiccolor_PaletteLibrary_renderGradient (
     export_pixels(fpixels, cpixels, w, h);
 
     env->SetIntArrayRegion(pixels, 0, w * h, cpixels);
-}
-
-extern "C"
-JNIEXPORT void
-JNICALL
-Java_com_algofashion_magiccolor_FilterBWActivity_redPaint (
-        JNIEnv *env,
-        jobject /* this */,
-        jintArray pixels,
-        jint w,
-        jint h) {
-
-    int a, r, g, b;
-
-    printf("Painting red\n");
-    jint cpixels[w * h];
-
-    int channels = 4;
-
-    int *fpixels;
-    fpixels = new int[w * h * channels];
-
-    ptTest *pt = new ptTest();
-    pt->test(fpixels, w, h);
-
-    int ct = 0;
-
-    for(int i = 0; i < w; i++) {
-        for(int j = 0; j < h; j++) {
-
-            a = 255;//fpixels[i * h * channels + j * channels];
-            r = fpixels[i * h * channels + j * channels + 1];
-            g = fpixels[i * h * channels + j * channels + 2];
-            b = fpixels[i * h * channels + j * channels + 3];
-
-            cpixels[i * h + j] = Color(a, r, g, b);
-            ct++;
-        }
-    }
-
-    (*env).SetIntArrayRegion(pixels, 0, w * h, cpixels);
 }

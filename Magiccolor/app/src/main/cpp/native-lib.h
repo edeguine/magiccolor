@@ -7,14 +7,6 @@
 
 #include <jni.h>
 
-JNIEXPORT void
-JNICALL
-Java_com_algofashion_magiccolor_FilterBWActivity_redPaint (
-        JNIEnv *env,
-        jobject /* this */,
-        jintArray pixels,
-        jint w,
-        jint h);
 
 JNIEXPORT void
 JNICALL

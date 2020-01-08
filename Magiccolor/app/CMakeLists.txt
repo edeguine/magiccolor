@@ -11,25 +11,13 @@ cmake_minimum_required(VERSION 3.4.1)
 # Gradle automatically packages shared libraries with your APK.
 
 
-file(GLOB helloext_src
-        "../../../../external_folder/*.h"
-        "../../../../external_folder/*.cpp"
-        "../../../../external_folder/psychetouch/psychetouch/src/libcoloring/*.h"
-        "../../../../external_folder/psychetouch/psychetouch/src/libcoloring/*.cpp"
-        "../../../../external_folder/psychetouch/psychetouch/src/libanimation/*.h"
-        "../../../../external_folder/psychetouch/psychetouch/src/libanimation/*.cpp"
-        "../../../../external_folder/psychetouch/psychetouch/src/libdna/*.h"
-        "../../../../external_folder/psychetouch/psychetouch/src/libdna/*.cpp"
-        "../../../../external_folder/psychetouch/psychetouch/src/libserver/*.h"
-        "../../../../external_folder/psychetouch/psychetouch/src/libserver/*.cpp"
+file(GLOB cpp_src
+        "../../cpp/src/*.h"
+        "../../cpp/src/*.cpp"
         )
 
 include_directories(
-        "../../../../external_folder"
-        "../../../../external_folder/psychetouch/psychetouch/src/libcoloring"
-        "../../../../external_folder/psychetouch/psychetouch/src/libanimation"
-        "../../../../external_folder/psychetouch/psychetouch/src/libdna"
-        "../../../../external_folder/psychetouch/psychetouch/src/libserver"
+        "../../cpp"
 )
 
 add_library( # Sets the name of the library.
@@ -40,7 +28,7 @@ add_library( # Sets the name of the library.
 
         # Provides a relative path to your source file(s).
         src/main/cpp/native-lib.cpp
-        ${helloext_src})
+        ${cpp_src})
 #${psychetouch_src})
 
 # Searches for a specified prebuilt library and stores the path as a
