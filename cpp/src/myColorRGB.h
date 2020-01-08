@@ -6,7 +6,6 @@
 
 #include "myPoint.h"
 #include "Colorspace.h"
-#include "KlkMColor.h"
 
 #define CV_DESCALE(x, n) (((x) + (1 << ((n)-1))) >> (n))
 
