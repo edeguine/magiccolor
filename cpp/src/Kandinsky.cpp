@@ -84,16 +84,11 @@ void Kandinsky::androidSeparateBW(int *pixels, int w, int h, float threshold, st
 void Kandinsky::pipeline(myImage *mim, float threshold, vector<myColorRGB> *palette, myPoint gradStart, myPoint gradEnd) {
     
     /* In this function we:
-     - extract points above and points below the threshold
-     - add anchor points to cover the full picture
-     - color the black points with a gradient using gradStart and gradEnd as anchor points
+      - add anchor points to cover the full picture
+      - generates a gradient using gradStart and gradEnd as anchor points
+      - color the black points with the gradient
     */
-
-	vector<myPoint> black;
-	vector<myPoint> white;
-
-    // Separate Black and White
-	Selecter::separateBW(mim, threshold, &black, &white);
+    
 
 	myImage *gradient;
 	gradient = (myImage *) new myCImage(mim->w, mim->h);
@@ -116,11 +111,24 @@ void Kandinsky::pipeline(myImage *mim, float threshold, vector<myColorRGB> *pale
         Gradient::linearGradient(gradient, colorCenters, *palette);
     }
 
-	for(auto p: black) {
-		mim->setCol(p, gradient->getCol(p));
-	}
+    myColorRGB col;
+    hsv h;
+    float gray;
+    myPoint p;
 
-	for(auto p: white) {
-		mim->setCol(p, myblack);
-	}
+    for(int i = 0; i < mim->w; i++) {
+        for(int j = 0; j < mim->h; j++) {
+            p.x = i;
+            p.y = j;
+            col = mim->getCol(p);
+            h = col.col2hsv();
+            gray = h.v / 255.0f;
+
+            if(gray <= threshold) {
+               mim->setCol(p, gradient->getCol(p));
+            } else {
+                mim->setCol(p, myblack);
+            }
+        }
+    }
 }

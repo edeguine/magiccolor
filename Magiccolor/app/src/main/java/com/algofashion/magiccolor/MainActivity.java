@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Triggers an image picker and calls the coloring activity
 
-        if (requestCode == PICK_IMAGE) {
+        if (requestCode == PICK_IMAGE && resultCode == RESULT_OK) {
             Log.v(TAG, data.getData().toString());
             Intent intent = new Intent(this, FilterBWActivity.class);
             intent.putExtra("Image", data.getData().toString());

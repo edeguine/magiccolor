@@ -317,5 +317,4 @@ public class FilterBWActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
     }
-
 }

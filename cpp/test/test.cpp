@@ -8,8 +8,8 @@
 using namespace std;
 
 void testKandinsky(myImage *mim) {
-	//string jpalette = "{\"palette\":[[255,0,0,255],[255,255,0,0], [255, 247, 297, 22]]}";
-	string jpalette = "{\"palette\":[[255,0,0,255]]}";
+	string jpalette = "{\"palette\":[[255,0,0,255],[255,255,0,0], [255, 247, 297, 22]]}";
+	//string jpalette = "{\"palette\":[[255,0,0,255]]}";
 	vector<myColorRGB> palette;
 	myPoint start(200, 200);
 	myPoint end(400, 400);

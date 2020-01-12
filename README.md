@@ -16,11 +16,11 @@ The app has three main features:
  - it allows you to create your own color palette for the gradients.
 
 ### Screenshots
-![Image of Result](https://github.com/edeguine/magiccolor/images/Result.png)
-![Image of Palettes](https://github.com/edeguine/magiccolor/images/Palettes.png)
-![Image of Custom palette](https://github.com/edeguine/magiccolor/images/CustomPalette.png)
-![Image of Custom Result](https://github.com/edeguine/magiccolor/images/CustomResult.png)
-![Image of UI](https://github.com/edeguine/magiccolor/images/MainUI.png)
+![Image of Result](https://github.com/edeguine/magiccolor/tree/master/images/Result.png)
+![Image of Palettes](https://github.com/edeguine/magiccolor/tree/master/images/Palettes.png)
+![Image of Custom palette](https://github.com/edeguine/magiccolor/tree/master/images/CustomPalette.png)
+![Image of Custom Result](https://github.com/edeguine/magiccolor/tree/master/images/CustomResult.png)
+![Image of UI](https://github.com/edeguine/magiccolor/tree/master/images/MainUI.png)
 
 
 
