@@ -1,17 +1,23 @@
 #include "myImage.h"
 
 bool myImage::inImage(myPoint point) {
+    // Test whether a point is inside the image or not.
+
 	bool res = ((int) point.x >= 0 && (int) point.x < w) && ((int) point.y >= 0 && (int) point.y < h);
 	return res;
 }
 
 myPoint myImage::randomPoint() {
+    // Get a random point in the image.
+
     return myPoint(utilcore::randomFloat(0, w), utilcore::randomFloat(0, h));
 }
 
 
 
 void myImage::clear() {
+    // Make the picture white.
+
 	myPoint point(0, 0);
 	for(int i = 0; i < w; i++) {
 		for(int j = 0; j < h; j++) {
@@ -23,6 +29,8 @@ void myImage::clear() {
 }
 
 void myImage::clearBlack() {
+    // Make the picture black.
+
     myPoint point(0, 0);
     for(int i = 0; i < w; i++) {
         for(int j = 0; j < h; j++) {
@@ -34,6 +42,8 @@ void myImage::clearBlack() {
 }
 
 void myImage::copy(myImage *ref) {
+    // Copy the image.
+
 	myPoint current;
 
 	for(int i = 0; i < w; i++) {

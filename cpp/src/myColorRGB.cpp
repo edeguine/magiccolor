@@ -9,6 +9,8 @@
 using namespace std;
 
 hsv myColorRGB::col2hsv() {
+    // Convert RGB to HSV.
+
 	rgb in;
 	in.r = r;
 	in.g = g;
@@ -17,11 +19,15 @@ hsv myColorRGB::col2hsv() {
 }
 
 myColorRGB myColorRGB::hsv2col(hsv in) {
+    // Convert HSV to RGB.
+
 	rgb out = Colorspace::hsv2rgb(in);
 	return myColorRGB(out.r, out.g, out.b);
 }
 
 myColorRGB myColorRGB::hsvMix(vector<myColorRGB> *col, vector<float> *concentrations) {
+    // Mix colors according to the HSV components.
+
 	hsv in, mix;
 	float concentration = 0;
 	float tot = 0;
@@ -43,7 +49,8 @@ myColorRGB myColorRGB::hsvMix(vector<myColorRGB> *col, vector<float> *concentrat
 }
 
 myColorRGB myColorRGB::hsvMix(myColorRGB cola, myColorRGB colb, float coeff) {
-	
+    // Mix colors according to the HSV components.
+
 	hsv ina, inb, mix;
 	ina = cola.col2hsv();
 	inb = colb.col2hsv();
@@ -57,6 +64,7 @@ myColorRGB myColorRGB::hsvMix(myColorRGB cola, myColorRGB colb, float coeff) {
 
 
 myColorRGB myColorRGB::cielMix(vector<myColorRGB> *colors, vector<float> *concentrations) {
+    // Mix colors using the XYZ components
 
 	int mode = 0; 
 
@@ -79,7 +87,7 @@ myColorRGB myColorRGB::cielMix(vector<myColorRGB> *colors, vector<float> *concen
 	 }
 
 	// We can mix in x, y, Y
-  // or X Y Z
+    // or X Y Z
 
 	for(int i = 0; i < concentrations->size(); i++) {
         coeff = concentrations->at(i);
@@ -104,6 +112,8 @@ myColorRGB myColorRGB::cielMix(vector<myColorRGB> *colors, vector<float> *concen
 }
 
 myColorRGB myColorRGB::cielMix(myColorRGB cola, myColorRGB colb, float coeff) {
+    // Mix according to the XYZ components.
+
 	cola.computeCiel();
 	colb.computeCiel();
 
@@ -111,7 +121,7 @@ myColorRGB myColorRGB::cielMix(myColorRGB cola, myColorRGB colb, float coeff) {
 
 	myColorRGB colc;
 	// We can mix in x, y, Y
-  // or X Y Z
+    // or X Y Z
 	switch(mode) {
 
 		case 0:
@@ -129,7 +139,8 @@ myColorRGB myColorRGB::cielMix(myColorRGB cola, myColorRGB colb, float coeff) {
 	return colc;
 }
 void myColorRGB::inverseCiel() {
-	// Y is already specified;
+	// Convert XYZ to RGB coordinates
+
 	if(mix_mode == 0) {
 		X = Y * x / y;
 		Z = Y * (1 - x - y) / y;
@@ -147,7 +158,7 @@ void myColorRGB::inverseCiel() {
 
 	R = (R > 0.0031308f) ?  1.055f * (pow(R, (1.0f / 2.4f))) - 0.055f: 12.92f * R;
 	G = (G > 0.0031308f) ? 1.055f * (pow(G, (1.0f / 2.4f))) - 0.055f: 12.92f * G;
-  B = (B > 0.0031308f) ? 1.055f * (pow(B, (1.0f / 2.4f))) - 0.055f: 12.92f * B;
+    B = (B > 0.0031308f) ? 1.055f * (pow(B, (1.0f / 2.4f))) - 0.055f: 12.92f * B;
 
 	R = R > 1.0f ? 1.0f : R;
 	G = G > 1.0f ? 1.0f : G;
@@ -159,6 +170,8 @@ void myColorRGB::inverseCiel() {
 }
 
 void myColorRGB::computeCiel() {
+    // Compute the XYZ coordinates
+
 	float R = (r / 255.0f);
 	float G = (g / 255.0f);
 	float B = (b / 255.0f);
@@ -166,7 +179,7 @@ void myColorRGB::computeCiel() {
 	R = R > 0.04045f ?
 		pow(((R + 0.055f) / 1.055f) , 2.4f): 
 		R / 12.92f;
-  G = G > 0.04045f ?
+    G = G > 0.04045f ?
 		pow(((G + 0.055f) / 1.055f), 2.4f):
 		G / 12.92f;
 	B = B > 0.04045f?

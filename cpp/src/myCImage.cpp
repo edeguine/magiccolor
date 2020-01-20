@@ -1,7 +1,7 @@
 #include "myCImage.h"
 
 myColorRGB myCImage::getCol(myPoint point, bool wrap) {
-    // myCImage is ARGB
+    // Get color at point. myCImage is ARGB
     if(wrap) {
         point.x = ((int) point.x) % w;
         point.y = ((int) point.y) % h;
@@ -21,7 +21,7 @@ myColorRGB myCImage::getCol(myPoint point, bool wrap) {
 }
 
 void myCImage::setCol(myPoint point, myColorRGB col, bool wrap) {
-    // myCImage is ARGB
+    // Set color at point. myCImage is ARGB
     if(wrap) {
         point.x = ((int) point.x) % w;
         point.y = ((int) point.y) % h;

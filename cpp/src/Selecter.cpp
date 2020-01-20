@@ -9,7 +9,7 @@
 #include "Selecter.h"
 
 void Selecter::separateBW(myImage *mim, float threshold, vector<myPoint> *black, vector<myPoint> *white) {
-    // Separates the image between points above and points below the threshold in terms of V component
+    // Separate the image between points above and points below the threshold in terms of V component
 	// threshold is between 0 and 1
 
 	myColorRGB col;

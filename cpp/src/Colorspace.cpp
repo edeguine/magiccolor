@@ -2,7 +2,7 @@
 #include "utilcore.h"
 
 float Colorspace::bidirmod(float value, float min, float max) {
-    // Float modulo, brings value between min and max
+    // Compute the float modulo, brings value between min and max
 
 	float res = value;
 	float vmin = (min < max) ? min : max;
@@ -20,7 +20,7 @@ float Colorspace::bidirmod(float value, float min, float max) {
 }
 
 hsv Colorspace::rgb2hsv(rgb in) {
-    // Converts RGB colors to HSV
+    // Convert RGB colors to HSV
 
     hsv         out;
     double      min, max, delta;
@@ -64,7 +64,7 @@ hsv Colorspace::rgb2hsv(rgb in) {
 }
 
 rgb Colorspace::hsv2rgb(hsv in) {
-    // HSV to RGB conversion
+    // Convert HSV to RGB
 
     double hh, p, q, t, ff;
     long i;

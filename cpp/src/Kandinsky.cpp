@@ -35,7 +35,7 @@ void Kandinsky::distributePoints(myImage *mim, int n, myPoint start, myPoint end
 }
 
 void Kandinsky::extractGradientDirection(string jparam, myPoint *gradStart, myPoint *gradEnd) {
-    // Helper function to get the anchor points from the JSON params
+    // Get the anchor points from the JSON params string
 
 	json j = json::parse(jparam);
 	gradStart->x = j["gradientDirection"]["start"]["x"];
@@ -46,7 +46,7 @@ void Kandinsky::extractGradientDirection(string jparam, myPoint *gradStart, myPo
 }
 
 void Kandinsky::androidPalette(int *pixels, int w, int h, string jpalette) {
-    // Creates a linear gradient rendering from a color palette to display in the UI
+    // Create a linear gradient rendering from a color palette to display in the UI
 
     myImage *mim;
     mim = (myImage *) new myCImage(w, h);
@@ -83,10 +83,13 @@ void Kandinsky::androidSeparateBW(int *pixels, int w, int h, float threshold, st
 
 void Kandinsky::pipeline(myImage *mim, float threshold, vector<myColorRGB> *palette, myPoint gradStart, myPoint gradEnd) {
     
-    /* In this function we:
-      - add anchor points to cover the full picture
-      - generates a gradient using gradStart and gradEnd as anchor points
-      - color the black points with the gradient
+    /* 
+        Compute the image inversion and gradient. 
+
+        In this function we:
+          - add anchor points to cover the full picture
+          - generates a gradient using gradStart and gradEnd as anchor points
+          - color the black points with the gradient
     */
     
 

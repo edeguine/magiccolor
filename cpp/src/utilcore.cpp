@@ -82,6 +82,8 @@ mt19937 utilcore::getMTgenerator(int seed) {
 
 
 int utilcore::randomInt(int min, int max) {
+    // Compute a random int between min and max.
+
     srand(clock());
     random_device rd;
     mt19937 gen(rd());
@@ -97,6 +99,8 @@ int utilcore::randomInt(int min, int max, mt19937 gen) {
 }
 
 int utilcore::randomInt(int min, int max, int seed) {
+    // Compute a random int between min and max using seed.
+
     mt19937 gen(seed);
     uniform_real_distribution<> dis(0, 1);
     return (int) (min + dis(gen) * (max - min));
@@ -112,6 +116,8 @@ double utilcore::randomDouble(double seed, double min, double max) {
 }
 
 float utilcore::randomFloat(float min, float max) {
+    // Compute a random float between min and max.
+
     srand(clock());
     random_device rd;
     mt19937 gen(rd());
@@ -121,12 +127,14 @@ float utilcore::randomFloat(float min, float max) {
 }
 
 float utilcore::randomFloat(float min, float max, mt19937 generator) {
+
     uniform_real_distribution<> dis(0, 1);
         
     return (min + dis(generator) * (max - min));
 }
 
 float utilcore::randomFloat(float min, float max, int seed) {
+    // Compute a random float between min and max.
     srand(seed);
     mt19937 gen(seed);
     uniform_real_distribution<> dis(0, 1);
@@ -136,6 +144,7 @@ float utilcore::randomFloat(float min, float max, int seed) {
 
 myPoint utilcore::randomVec(myPoint topleft, myPoint bottomright) {
     // Returns a random vector between topleft and bottomright
+
     srand(clock());
     random_device rd;
     mt19937 gen(rd());

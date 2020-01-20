@@ -1,7 +1,7 @@
 #include "Gradient.h"
 
 myColorRGB Gradient::Hue(float t, float cycle) {
-    // Returns a cyclical mapping of t into a color 
+    // Convert t to a pure hue periodic color of period cycle.
 
     hsv hcol;
     hcol.h = fmodf(fabs(t), cycle) * 360.0f / cycle;
@@ -13,7 +13,7 @@ myColorRGB Gradient::Hue(float t, float cycle) {
 
 
 void Gradient::linearGradient(myImage *mim, vector<myPoint> centers, vector<myColorRGB> palette) {
-    // Linear gradient with the colors from palette using the first and last center as anchor points
+    // Fill mim with a linear gradient with the colors from palette using the first and last center as anchor points.
 
 	myPoint p;
 	myColorRGB col;
@@ -47,7 +47,7 @@ void Gradient::linearGradient(myImage *mim, vector<myPoint> centers, vector<myCo
 
 
 void Gradient::rainbow(myImage *mim, myPoint minXY, myPoint maxXY, myPoint direction) {
-    // Cyclical rainbow gradient with minXY and maxXY as anchoir points
+    // Fill mim with a rainbow gradient using minXY and maxXY as anchoir points.
 
 	float period = direction.L2();
 
@@ -68,7 +68,7 @@ void Gradient::rainbow(myImage *mim, myPoint minXY, myPoint maxXY, myPoint direc
 }
 
 void Gradient::sampleGradient(myImage *mim, vector<myColorRGB> *palette) {
-    // Used by the android app to turn a color palette into a linear gradient
+    // Fill mim with a a gradient using the colors in palette.
 
 	myPoint p;
 	myColorRGB col;
